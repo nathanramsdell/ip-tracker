@@ -2,10 +2,31 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
+import { useEffect, useState } from 'react';
+import InformationBar from '@/src/components/InformationBar';
 
-const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+export default function Home(props) {
+  const api_url = 'https://geo.ipify.org/api/v1?';
+  const api_key = process.env.NEXT_PUBLIC_IPIFY_API_KEY;
+  const [ipAddress, setIpAddress] = useState(props.ip.ip)
+  const [ip, setIp] = useState(null)
+
+
+  useEffect(() => {
+    const url = `${api_url}apiKey=${api_key}&ipAddress=${ipAddress}`
+    async function fetchIp() {
+      const response = await fetch(url);
+      const ip = await response.json();
+      setIp(ip);
+    }
+    fetchIp();
+  }, [ipAddress])
+
+  if (!ip) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <>
       <Head>
@@ -15,8 +36,15 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        
+        <InformationBar ip={ip}/>
       </main>
     </>
   )
+}
+
+export async function getServerSideProps() { 
+  const res = await fetch('https://api.ipify.org/?format=json');
+  const ip = await res.json()
+
+  return {props: {ip}}
 }
