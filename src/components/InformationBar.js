@@ -10,7 +10,7 @@ const InformationBar = (props) => {
                     Ip Address
                 </p>
                 <p className='information__content'>
-                    {props.ip.ip}
+                    {props.ip !== 'error' ? props.ip.ip : '-'}
                 </p>
             </div>
 
@@ -20,8 +20,8 @@ const InformationBar = (props) => {
                     Location
                 </p>
                 <p className='information__content'>
-                    {props.ip.location.city}, {props.ip.location.region}<br />
-                    {props.ip.location.postalCode}
+                    {props.ip !== 'error' ? `${props.ip.location.city}, ${props.ip.location.region}` : '-' }
+                    
                 </p>
             </div>
 
@@ -31,7 +31,7 @@ const InformationBar = (props) => {
                     Timezone
                 </p>
                 <p className='information__content'>
-                    UTC {props.ip.location.timezone}
+                     {props.ip !== 'error' ? `UTC ${props.ip.location.timezone}` : '-'}
                 </p>
             </div>
 
@@ -41,7 +41,7 @@ const InformationBar = (props) => {
                     Isp
                 </p>
                 <p className='information__content'>
-                    {props.ip.isp}
+                    {props.ip !== 'error' ? props.ip.isp : '-'}
                 </p>
             </div>
         </div>

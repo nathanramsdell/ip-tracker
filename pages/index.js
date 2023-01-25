@@ -4,6 +4,7 @@ import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
 import { useEffect, useState } from 'react';
 import InformationBar from '@/src/components/InformationBar';
+import SearchBar from '@/src/components/SearchBar';
 
 
 export default function Home(props) {
@@ -18,7 +19,12 @@ export default function Home(props) {
     async function fetchIp() {
       const response = await fetch(url);
       const ip = await response.json();
-      setIp(ip);
+      if (ip.code == 422) {
+        console.log(ip.messages)
+        setIp('error')
+      } else {
+        setIp(ip);
+      }
     }
     fetchIp();
   }, [ipAddress])
@@ -36,6 +42,7 @@ export default function Home(props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
+        <SearchBar setIpAddress={setIpAddress} />
         <InformationBar ip={ip}/>
       </main>
     </>
